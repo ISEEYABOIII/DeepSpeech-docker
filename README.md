@@ -4,35 +4,35 @@
 Tento dokument poskytuje kroky pro vytvoření a používání Docker kontejneru pro DeepSpeech.
 
 ## Obsah
-1. [Klonování Git Repozitáře](#klonování-git-repozitáře)
-2. [Sestavení Docker Image](#sestavení-docker-image)
-3. [Spuštění Docker Compose](#spuštění-docker-compose)
-4. [Připojení k Běžícímu Kontejneru](#připojení-k-běžícímu-kontejneru)
-5. [Vypnutí Kontejneru](#vypnutí-kontejneru)
-6. [Trénování Vlastního Modelu](#trénování-vlastního-modelu)
-7. [Vygenerování Souboru Alphabet.txt](#vygenerování-souboru-alphabet.txt)
+1. [Klonování Git Repozitáře](#Klonování-Git-repozitáře)
+2. [Sestavení Docker Image](#Sestavení-Docker-image)
+3. [Spuštění Docker Compose](#Spuštění-Docker-compose)
+4. [Připojení k Běžícímu Kontejneru](Připojení-k-běžícímu-kontejneru)
+5. [Vypnutí Kontejneru](#Vypnutí-kontejneru)
+6. [Trénování Vlastního Modelu](#Trénování-vlastního-modelu)
+7. [Vygenerování Souboru Alphabet.txt](#Vygenerování-souboru-alphabet.txt)
 
-## Klonování Git Repozitáře
+## Klonování Git repozitáře
 Nejdříve si stáhněte repozitář z Gitu:
 ```
 git clone https://github.com/ISEEYABOIII/DeepSpeech-docker
 ```
 
-## Sestavení Docker Image
+## Sestavení Docker image
 Poté sestavte Docker Image pomocí následujícího příkazu:
 ```
 docker build -t deepspeech-image .
 ```
 Tento příkaz vytvoří Docker Image s názvem `deepspeech-image` z Dockerfile ve vašem současném adresáři.
 
-## Spuštění Docker Compose
+## Spuštění Docker compose
 Pro spuštění Docker kontejneru použijte:
 ```
 docker-compose up -d
 ```
 Příkaz `-d` znamená, že kontejnery běží na pozadí.
 
-## Připojení k Běžícímu Kontejneru
+## Připojení k běžícímu kontejneru
 Pro zjištění ID nebo jména vašeho běžícího kontejneru použijte:
 ```
 docker ps
@@ -43,36 +43,36 @@ docker exec -it <container_id_nebo_name> /bin/bash
 ```
 Nahraďte `<container_id_nebo_name>` skutečným ID nebo jménem vašeho kontejneru.
 
-## Vypnutí Kontejneru
+## Vypnutí kontejneru
 A konečně, pro vypnutí kontejneru použijte:
 ```
 docker-compose down
 ```
 Tento příkaz zastaví a odstraní všechny kontejnery definované ve vašem `docker-compose.yml`.
 
-## Trénování Vlastního Modelu
+## Trénování vlastního modelu
 Stahovat datasety nahrávek je možné z [Common Voice](https://commonvoice.mozilla.org/cs/datasets).
 
-### Kopírování Nahrávek do Kontejneru
+### Kopírování nahrávek do kontejneru
 Zkopírujte nahrávky pro trénink z vašeho PC do Docker kontejneru:
 ```
 docker cp (home/user)~/[jmeno-souboru] [id-containeru]:/[cesta]
 ```
 Nahraďte `[jmeno-souboru]`, `[id-containeru]`, `[cesta]` správným názvem souboru, ID kontejneru a cestou.
 
-#### Příklad Příkazu
+#### Příklad příkazu
 ```
 docker cp ~/cv-corpus-13.0-2023-03-09-cs.tar.gz 70f7d0c11df5:/DeepSpeech/data/recordings
 ```
 
-### Extrahování Archivu
+### Extrahování archivu
 Extrahujte archiv:
 ```
 tar -xzf data/recordings/[jmeno-souboru] -C [adresář-extraxce]
 ```
 Nahraďte `[jmeno-souboru]` správným názvem souboru.
 
-#### Příklad Příkazu
+#### Příklad příkazu
 ```
 tar -xzf data/recordings/cv-corpus-13.0-2023-03-09-cs.tar.gz -C data/recordings
 ```
@@ -84,12 +84,12 @@ python bin/import_cv2.py data/recordings/[cesta]/
 ```
 Nahraďte `[cesta]` správnou cestou.
 
-#### Příklad Příkazu
+#### Příklad příkazu
 ```
 python bin/import_cv2.py data/recordings/cv-corpus-13.0-2023-03-09/cs/
 ```
 
-## Vygenerování Souboru Alphabet.txt
+## Vygenerování souboru Alphabet.txt
 Spusťte Python interpreter:
 ```
 python3
