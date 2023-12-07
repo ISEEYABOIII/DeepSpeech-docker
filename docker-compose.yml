@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   deepspeech:
-    image: my-deepspeech-image
+    image: deepspeech-image
     command: tail -f /dev/null
     volumes:
       - DeepSpeech-data:/DeepSpeech/data
