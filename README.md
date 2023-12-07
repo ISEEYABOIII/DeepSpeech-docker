@@ -26,7 +26,7 @@ docker build -t deepspeech-image .
 Tento příkaz vytvoří Docker Image s názvem `deepspeech-image` z Dockerfile ve vašem současném adresáři.
 
 ## Spuštění Docker Compose
-Pro spuštění Docker kontejneru v režimu odpojeného terminálu použijte:
+Pro spuštění Docker kontejneru použijte:
 ```
 docker-compose up -d
 ```
@@ -56,31 +56,29 @@ Stahovat datasety nahrávek je možné z [Common Voice](https://commonvoice.mozi
 ### Kopírování Nahrávek do Kontejneru
 Zkopírujte nahrávky pro trénink z vašeho PC do Docker kontejneru:
 ```
-docker cp ~/[jmeno-souboru] [id-containeru]:/[cesta]
+docker cp (home/user)~/[jmeno-souboru] [id-containeru]:/[cesta]
 ```
 Nahraďte `[jmeno-souboru]`, `[id-containeru]`, `[cesta]` správným názvem souboru, ID kontejneru a cestou.
 
 #### Příklad Příkazu
 ```
-docker cp ~/downloads/cv-corpus-13.0-2023-03-09-cs.tar.gz 70f7d0c11df5:/DeepSpeech/data/recordings
+docker cp ~/cv-corpus-13.0-2023-03-09-cs.tar.gz 70f7d0c11df5:/DeepSpeech/data/recordings
 ```
 
 ### Extrahování Archivu
 Extrahujte archiv:
 ```
-tar -xzf data/recordings/[jmeno-souboru]
+tar -xzf data/recordings/[jmeno-souboru] -C [adresář-extraxce]
 ```
 Nahraďte `[jmeno-souboru]` správným názvem souboru.
 
 #### Příklad Příkazu
 ```
-tar -xzf data
-
-/recordings/cv-corpus-13.0-2023-03-09-cs.tar.gz
+tar -xzf data/recordings/cv-corpus-13.0-2023-03-09-cs.tar.gz -C data/recordings
 ```
 
-### Převod Souborů z Archivu
-Spusťte skript na převedení souborů z archivu do požadovaného formátu:
+### Script na převeedení datasetu na potřebný formát
+Spusťte skript na převedení souborů z datasetu do požadovaného formátu:
 ```
 python bin/import_cv2.py data/recordings/[cesta]/
 ```
