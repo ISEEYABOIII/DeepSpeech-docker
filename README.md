@@ -8,10 +8,9 @@ Tento dokument poskytuje kroky pro vytvoření a používání Docker kontejneru
 Nejdříve si stáhněte repozitář z Gitu:
 
 ```
-git clone [link]
+git clone [[link]](https://github.com/ISEEYABOIII/DeepSpeech-docker)
 ```
 
-Nahraďte `[link]` skutečnou URL adresou vašeho Git repozitáře.
 
 ## Sestavení Docker Image
 
