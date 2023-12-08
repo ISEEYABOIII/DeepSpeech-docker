@@ -1,17 +1,11 @@
-Samozřejmě, přeformátuji a doplním celý dokument:
-
----
-
 # DeepSpeech Docker Návod
-
-Tento dokument poskytuje kroky pro vytvoření a používání Docker kontejneru pro DeepSpeech.
 
 ## Obsah
 1. [Instalace a Konfigurace](#instalace-a-konfigurace)
    - [Klonování Git Repozitáře](#klonování-git-repozitáře)
    - [Sestavení Docker Image](#sestavení-docker-image)
-   - [Spuštění Docker Compose](#spuštění-docker-compose)
 2. [Práce s Kontejnerem](#práce-s-kontejnerem)
+   - [Spuštění Docker Compose](#spuštění-docker-compose)
    - [Připojení k Běžícímu Kontejneru](#připojení-k-běžícímu-kontejneru)
    - [Vypnutí Kontejneru](#vypnutí-kontejneru)
 3. [Příprava pro Trénování](#příprava-pro-trénování)
@@ -36,14 +30,14 @@ docker build -t deepspeech-image .
 ```
 Tento příkaz vytvoří Docker Image s názvem `deepspeech-image` z Dockerfile ve vašem současném adresáři.
 
+## Práce s Kontejnerem
+
 ### Spuštění Docker compose
 Pro spuštění Docker kontejneru použijte:
 ```
 docker-compose up -d
 ```
 Příkaz `-d` znamená, že kontejnery běží na pozadí.
-
-## Práce s Kontejnerem
 
 ### Připojení k běžícímu kontejneru
 Pro zjištění ID nebo jména vašeho běžícího kontejneru použijte:
@@ -79,8 +73,6 @@ docker cp ~/cv-corpus-13.0-2023-03-09-cs.tar.gz 70f7d0c11df5:/DeepSpeech/data/re
 
 ### Extrahování archivu
 Extrahujte archiv
-
-:
 ```
 tar -xzf data/recordings/[jmeno-souboru] -C [adresář-extraxce]
 ```
@@ -104,15 +96,116 @@ python bin/import_cv2.py data/recordings/cv-corpus-13.0-2023-03-09/cs/
 ```
 
 ### Vygenerování souboru Alphabet.txt
-Spusťte Python interpreter a proveďte následující skript pro generování souboru `alphabet.txt`:
-```python
-# kompletní kód skriptu pro generování alphabet.txt
+
+Vytvořte si python script pomocí nano:
 ```
+nano script.py
+```
+
+
+Vložte do editoru následující kód:
+```python
+import csv
+import string
+
+# Cesty k CSV souborům
+csv_files = [
+        '[cesta]/train.csv',
+        '[cesta]/dev.csv',
+        '[cesta]/test.csv'
+]
+
+def generate_alphabet(csv_files):
+        # Čtení existujících znaků z alphabet.txt
+        existing_chars = set()
+        try:
+                with open('data/alphabet.txt', 'r', encoding='utf-8') as file:
+                        for line in file:
+                                existing_chars.add(line.strip())
+        except FileNotFoundError:
+                # Pokud soubor neexistuje, začneme s prázdnou množinou
+                pass
+
+        # Hledání unikátních znaků v CSV souborech
+        unique_chars = set()
+        for csv_file in csv_files:
+                with open(csv_file, newline='', encoding='utf-8') as file:
+                        reader = csv.reader(file)
+                        next(reader)  # Přeskočit header
+                        for row in reader:
+                                text = row[2]
+                                unique_chars.update(text)
+
+        # Kombinace existujících a nových unikátních znaků
+        updated_chars = existing_chars.union(unique_chars)
+
+        # Zápis aktualizované sady znaků do alphabet.txt
+        with open('data/alphabet.txt', 'w', encoding='utf-8') as file:
+                for char in sorted(updated_chars):
+                        file.write(char + '\n')
+
+if __name__ == '__main__':
+        generate_alphabet(csv_files)
+```
+Nahraďte `[cesta]` správnou cestou k vašim datům.
+
+#### Příklad příkazu
+```python
+import csv
+import string
+
+# Cesty k CSV souborům
+csv_files = [
+        'data/recordings/cv-corpus-15.0-2023-09-08/cs/clips/train.csv',
+        'data/recordings/cv-corpus-15.0-2023-09-08/cs/clips/dev.csv',
+        'data/recordings/cv-corpus-15.0-2023-09-08/cs/clips/test.csv'
+]
+
+def generate_alphabet(csv_files):
+        # Čtení existujících znaků z alphabet.txt
+        existing_chars = set()
+        try:
+                with open('data/alphabet.txt', 'r', encoding='utf-8') as file:
+                        for line in file:
+                                existing_chars.add(line.strip())
+        except FileNotFoundError:
+                # Pokud soubor neexistuje, začneme s prázdnou množinou
+                pass
+
+        # Hledání unikátních znaků v CSV souborech
+        unique_chars = set()
+        for csv_file in csv_files:
+                with open(csv_file, newline='', encoding='utf-8') as file:
+                        reader = csv.reader(file)
+                        next(reader)  # Přeskočit header
+                        for row in reader:
+                                text = row[2]
+                                unique_chars.update(text)
+
+        # Kombinace existujících a nových unikátních znaků
+        updated_chars = existing_chars.union(unique_chars)
+
+        # Zápis aktualizované sady znaků do alphabet.txt
+        with open('data/alphabet.txt', 'w', encoding='utf-8') as file:
+                for char in sorted(updated_chars):
+                        file.write(char + '\n')
+
+if __name__ == '__main__':
+        generate_alphabet(csv_files)
+```
+
+Ukončete upravování pomocí `ctrl + X` následného stistnutí klávesy `Y` pro uložení a potvrzení klávesou `enter`
+
+Spusťte script.py pro vygenerování souboru `alphabet.txt` pomocí  :
+```
+python script.py
+```
+
 
 ## Spuštění Trénování Modelu
 Pro spuštění trénování modelu DeepSpeech použijte následující příkaz:
 ```
-python DeepSpeech/DeepSpeech.py \
+python DeepSpeech.py \
 --train_files [cesta]/train.csv \
 --dev_files [cesta]/dev.csv \
 --test_files [cesta]/test.csv \
@@ -131,7 +224,7 @@ python DeepSpeech/DeepSpeech.py \
 
 ### Příklad příkazu
 ```
-python DeepSpeech/DeepSpeech.py \
+python DeepSpeech.py \
 --train_files data/recordings/cv-corpus-15.0-2023-09-08/cs/clips/train.csv \
 --dev_files data/recordings/cv-corpus-15.0-2023-09-08/cs/clips/dev.csv \
 --test_files data/recordings/cv-corpus-15.0-2023-09-08/cs/clips/test.csv \
