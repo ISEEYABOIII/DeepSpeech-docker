@@ -31,6 +31,9 @@ RUN apt-get install -y sox libsox-fmt-mp3
 # Install Python 3 development package
 RUN apt-get install -y python3-dev
 
+# Install nano
+RUN apt-get install nano
+
 # Create a directory for recordings
 RUN mkdir -p /DeepSpeech/data/recordings
 
