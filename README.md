@@ -14,6 +14,7 @@
    - [Převod Datasetu na Požadovaný Formát](#převod-datasetu-na-požadovaný-formát)
    - [Vygenerování Souboru Alphabet.txt](#vygenerování-souboru-alphabettxt)
 4. [Spuštění Trénování Modelu](#spuštění-trénování-modelu)
+   - [Přehled Parametrů](#přehled-parametrů-trénování-deepspeech)
 
 ## Instalace a Konfigurace
 
@@ -194,9 +195,9 @@ if __name__ == '__main__':
         generate_alphabet(csv_files)
 ```
 
-Ukončete upravování pomocí `ctrl + X` následného stistnutí klávesy `Y` pro uložení a potvrzení klávesou `enter`
+Ukončete upravování pomocí `ctrl + X` následného stistnutí klávesy `Y` pro uložení a potvrzení klávesou `enter`.
 
-Spusťte script.py pro vygenerování souboru `alphabet.txt` pomocí  :
+Spusťte script.py pro vygenerování souboru `alphabet.txt` pomocí:
 ```
 python script.py
 ```
